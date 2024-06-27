@@ -17,7 +17,7 @@ jobs:
         uses: easingthemes/ssh-deploy@v2.1.6
         with:
           server: ${{ secrets.SSH_HOST }}
-          username: ubuntu
+          username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu
