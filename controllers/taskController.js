@@ -1,24 +1,25 @@
 const TaskModel = require('../models/taskModel');
+const { sendMessage } = require('../services/sqsService');
 
 // Cria uma nova tarefa
 const createTask = async (req, res) => {
-  const { id, descricao } = req.body;
+  const { descricao } = req.body;
 
   try {
-    if (!id || !descricao) {
-      return res.status(400).json({ error: 'Missing required fields: id and descricao' });
+    if (!descricao) {
+      return res.status(400).json({ error: 'Missing required fields: descricao' });
     }
 
-    const task = new TaskModel({ id, descricao });
+    const task = new TaskModel({ descricao });
     await task.create();
+    await sendMessage(task.task); 
 
-    res.status(201).json(task);
+    res.status(201).json(task.task);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Obtém todas as tarefas
 const getTasks = async (req, res) => {
   try {
     const taskModel = new TaskModel();
@@ -29,7 +30,6 @@ const getTasks = async (req, res) => {
   }
 };
 
-// Obtém uma tarefa pelo ID
 const getTaskById = async (req, res) => {
   const { id } = req.params;
 
@@ -47,7 +47,6 @@ const getTaskById = async (req, res) => {
   }
 };
 
-// Atualiza uma tarefa pelo ID
 const updateTask = async (req, res) => {
   const { id } = req.params;
   const { descricao } = req.body;
@@ -59,14 +58,14 @@ const updateTask = async (req, res) => {
 
     const taskModel = new TaskModel({ id, descricao });
     await taskModel.update();
+    await sendMessage({ id, descricao }); 
 
-    res.status(200).json(taskModel);
+    res.status(200).json(taskModel.task);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Deleta uma tarefa pelo ID
 const deleteTask = async (req, res) => {
   const { id } = req.params;
 

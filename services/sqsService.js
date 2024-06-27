@@ -1,20 +1,21 @@
 const AWS = require('aws-sdk');
-const sqs = new AWS.SQS({ 
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
+
+const sqs = new AWS.SQS({ region: process.env.AWS_REGION });
+const queueUrl = process.env.SQS_QUEUE_URL;
 
 const sendMessage = async (task) => {
   const params = {
-    QueueUrl: process.env.SQS_QUEUE_URL,
-    MessageBody: JSON.stringify({
-      descricao: task.descricao,
-      id: task.id,
-    }),
+    QueueUrl: queueUrl,
+    MessageBody: JSON.stringify(task),
   };
 
-  return sqs.sendMessage(params).promise();
+  try {
+    const result = await sqs.sendMessage(params).promise();
+    console.log('Message sent to SQS:', result.MessageId);
+  } catch (error) {
+    console.error('Error sending message to SQS:', error);
+    throw new Error('Error sending message to SQS');
+  }
 };
 
 module.exports = { sendMessage };

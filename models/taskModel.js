@@ -1,13 +1,15 @@
 const dynamodb = require('./dynamodb');
+const { v4: uuidv4 } = require('uuid');
 
 const TABLE_NAME = process.env.DYNAMODB_TABLE;
 
 class TaskModel {
   constructor(task) {
-    this.task = task || {}; // Inicializa com um objeto vazio caso não haja dados
+    this.task = task || {};
   }
 
   async create() {
+    this.task.id = uuidv4(); 
     const params = {
       TableName: TABLE_NAME,
       Item: this.task,

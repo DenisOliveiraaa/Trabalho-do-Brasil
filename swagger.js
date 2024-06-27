@@ -4,12 +4,12 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Task API',
+      title: 'Trabalho do Brasil',
       version: '1.0.0',
-      description: 'A simple CRUD API to manage tasks',
+      description: 'CRUD de tarefas',
       contact: {
-        name: 'Your Name',
-        email: 'your-email@example.com',
+        name: 'Denis',
+        email: 'denis.9697@gmail.com',
       },
     },
     servers: [
