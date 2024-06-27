@@ -13,19 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Node.js and npm
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: |
-          npm install
-
-      - name: Run tests
-        run: |
-          npm test
-
       - name: Deploy to EC2
         uses: easingthemes/ssh-deploy@v2.1.6
         with:
@@ -33,7 +20,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/trabalho-do-brasil  # Ajuste o diretório conforme necessário
+            cd /home/ubuntu
             git pull origin main
             npm install
             npm run build
