@@ -4,12 +4,12 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Trabalho do Brasil',
+      title: 'Task API',
       version: '1.0.0',
-      description: 'API de Tarefas',
+      description: 'A simple CRUD API to manage tasks',
       contact: {
-        name: 'Denis Oliveira',
-        email: 'denis.9697@gmail.com',
+        name: 'Your Name',
+        email: 'your-email@example.com',
       },
     },
     servers: [
@@ -20,7 +20,7 @@ const options = {
     ],
   },
   apis: ['./routes/*.js'],
-};
+};  
 
 const swaggerSpec = swaggerJsdoc(options);
 module.exports = swaggerSpec;
