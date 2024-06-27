@@ -13,18 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Deploy to EC2
         uses: easingthemes/ssh-deploy@v2.1.6
         with:
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SOURCE: "."  
-          TARGET: "/home/ubuntu/Trabalho-do-Brasil"  
-          ARGS: "-rltgoDzvO"  
-          EXCLUDE: ".git*,node_modules, .env*" 
+          SCRIPT: |
+            cd /home/ubuntu/Trabalho-do-Brasil
             git pull origin main
             npm install
             npm run build
             echo "${{ secrets.ENV_VARS }}" > .env
             pm2 restart all
+          REMOTE_PORT: 22
+          TARGET: /home/${{ secrets.REMOTE_USER }}
+          ARGS: -rltgoDzvO
+          EXCLUDE: ".git*,node_modules,.env*"
